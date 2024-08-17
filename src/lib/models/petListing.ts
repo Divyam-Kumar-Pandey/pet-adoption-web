@@ -1,13 +1,13 @@
-import mongoose from "mongoose";
+import {Schema, model, models} from 'mongoose';
 
-const petListingSchema = new mongoose.Schema({
+const petListingSchema = new Schema({
     name: {
         type: String,
-        required: true,
+        required: [true, "Name is required"],
     },
     type: {
         type: String,
-        required: true,
+        required: [true, "Type is required"],
     },
     age: {
         type: Number,
@@ -27,15 +27,15 @@ const petListingSchema = new mongoose.Schema({
     },
     location: {
         type: String,
-        required: true,
+        required: [true, "Location is required"],
     },
     contact: {
         type: String,
-        required: true,
+        required: [true, "Contact is required"],
     },
     createdAt: { type: Date, default: Date.now },
 });
 
-const PetListing = mongoose.model("PetListing", petListingSchema);
+const PetListing = models.PetListing || model("PetListing", petListingSchema);
 
 export default PetListing;
