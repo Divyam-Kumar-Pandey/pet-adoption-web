@@ -168,3 +168,76 @@ The code defines an asynchronous POST request handler to create a new pet listin
 12. Appropriate error responses are returned for unauthorized access, validation errors, duplicate listings, database connection issues, or server errors.
 
 ---
+
+## Delete Pet Listing
+
+Delete an existing pet listing.
+
+### Request
+
+- **Method:** DELETE
+- **URL:** `/api/pet?id=<pet_id>`
+- **Headers:**
+  - API_KEY: `<api_key>`
+- **Query Parameters:** 
+  - `id`: The unique ID of the pet listing to delete.
+
+### Response
+
+- **Status: 200 OK**
+- **Body:**
+  ```text
+  Pet listing deleted
+  ```
+
+### Error Responses
+
+- **Unauthorized Access**
+  - **Status: 401 Unauthorized**
+  - **Body:**
+    ```text
+    Unauthorized
+    ```
+
+- **Invalid Pet ID**
+  - **Status: 400 Bad Request**
+  - **Body:**
+    ```text
+    Invalid pet ID
+    ```
+
+- **Pet Listing Not Found**
+  - **Status: 404 Not Found**
+  - **Body:**
+    ```text
+    Pet listing not found
+    ```
+
+- **Database Connection Error**
+  - **Status: 500 Internal Server Error**
+  - **Body:**
+    ```text
+    Error connecting to MongoDB
+    ```
+
+- **Server Error**
+  - **Status: 500 Internal Server Error**
+  - **Body:**
+    ```text
+    Error deleting pet listing: <error details>
+    ```
+
+### Code Overview
+
+The code defines an asynchronous DELETE request handler to delete an existing pet listing.
+
+1. The `checkAuth` function verifies the user's authentication based on the API KEY in the request headers.
+2. If authentication fails, a 401 Unauthorized response is returned.
+3. A connection to the MongoDB database is established.
+4. The code retrieves the `id` query parameter from the request URL.
+5. The code validates that the `id` parameter is a valid MongoDB ObjectID.
+6. If validation fails, a 400 Bad Request response is returned.
+7. The code attempts to find the pet listing with the specified ID in the database.
+8. If the pet listing is not found, a 404 Not Found response is returned.
+9. If the pet listing is found, it is deleted from the database.
+

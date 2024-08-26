@@ -92,3 +92,32 @@ export async function POST(req: Request) {
         return new Response(`Error creating pet listing: ${e}`, { status: 500 });
     }
 }
+
+export async function DELETE(req: Request) {
+    if (checkAuth(req) === false) {
+        return new Response("Unauthorized", { status: 401 });
+    }
+
+    try {
+        await connect();
+    } catch (e) {
+        return new Response("Error connecting to MongoDB", { status: 500 });
+    }
+
+    const params = new URL(req.url).searchParams;
+    const id = params.get("id");
+
+    if (!id) {
+        return new Response("ID is required", { status: 400 });
+    }
+
+    try {
+        const petListing = await PetListing.findByIdAndDelete(id);
+        if (!petListing) {
+            return new Response("Pet listing not found", { status: 404 });
+        }
+        return new Response("Pet listing deleted", { status: 200 });
+    } catch (e) {
+        return new Response(`Error deleting pet listing: ${e}`, { status: 500 });
+    }
+}
